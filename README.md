@@ -47,4 +47,7 @@ Check if Game Should Continue                                          |
   |                                                                    |
   v                                                                    |
 End Game if Necessary / Prepare for Next Round ------------------------'
- 
+
+
+ ![image](https://github.com/beryaelio/Server-Client-Bot-Trivia-Game/assets/47675083/be79b2f1-3aab-4e5e-88a8-a67a78668206)
+
