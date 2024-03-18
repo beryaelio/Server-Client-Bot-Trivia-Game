@@ -11,7 +11,7 @@ To answer 'True' you should type 'Y', 'T' or 1. To answer 'False' you should typ
 
 In this project we made 3 main python files: Server.py, Client.py, Bot.py
 
-We also have 2 python files: InputClass.py and Questions.py
+We also have 3 helper python files: Input.py, Statistics.py and Questions.py
 
 To run the game you need to run the Server.py first and the Client.py and Bot.py to be players in the game.
 
