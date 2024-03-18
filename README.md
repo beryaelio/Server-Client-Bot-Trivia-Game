@@ -50,4 +50,7 @@ End Game if Necessary / Prepare for Next Round ------------------------'
 
 
  ![image](https://github.com/beryaelio/Server-Client-Bot-Trivia-Game/assets/47675083/be79b2f1-3aab-4e5e-88a8-a67a78668206)
+![image](https://github.com/beryaelio/Server-Client-Bot-Trivia-Game/assets/47675083/54ee0b03-99d9-4f5c-a9b6-f494718944ae)
+![image](https://github.com/beryaelio/Server-Client-Bot-Trivia-Game/assets/47675083/163ac02d-93d6-4cf5-8745-868f612cee00)
+![image](https://github.com/beryaelio/Server-Client-Bot-Trivia-Game/assets/47675083/377784b0-7bd6-4e6e-bd82-6b00fe3a3856)
 
