@@ -4,6 +4,7 @@ A trivia game you can run locally. Here's the server side, client side and even 
 
 
 # Flowchart of the Server's Executation: 
+```sql
 Start
   |
   v
@@ -47,7 +48,7 @@ Check if Game Should Continue                                          |
   |                                                                    |
   v                                                                    |
 End Game if Necessary / Prepare for Next Round ------------------------'
-
+```
 
  ![image](https://github.com/beryaelio/Server-Client-Bot-Trivia-Game/assets/47675083/be79b2f1-3aab-4e5e-88a8-a67a78668206)
 ![image](https://github.com/beryaelio/Server-Client-Bot-Trivia-Game/assets/47675083/54ee0b03-99d9-4f5c-a9b6-f494718944ae)
