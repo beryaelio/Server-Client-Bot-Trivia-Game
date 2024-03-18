@@ -1,5 +1,7 @@
 # Server-Client-Bot Trivia Game
-A trivia game we created in python that you can run locally. Here's the server side, client side and even a bot implementation. 
+A trivia game we created in python that you can run locally. Here's the server side, client side and even a bot implementation.
+![image](https://github.com/beryaelio/Server-Client-Bot-Trivia-Game/assets/47675083/d3ffc495-1b7b-469b-9162-c6f5d0fa4f0e)
+
 
 # Introduction
 ## Brief Description: 
