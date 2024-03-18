@@ -11,7 +11,7 @@ To answer 'True' you should type 'Y', 'T' or 1. To answer 'False' you should typ
 
 In this project we made 3 main python files: Server.py, Client.py, Bot.py
 
-We also have 3 helper python files: Input.py, Statistics.py and Questions.py
+We also have 4 helper python files: Input.py, Statistics.py, Questions.py and QuestionManager.py
 
 To run the game you need to run the Server.py first and the Client.py and Bot.py to be players in the game.
 
@@ -32,13 +32,16 @@ Bot.py - A bot class that acts like a player. Sends a random answer for each que
 
 Questions.py - A python file imported in the Server.py file that contains all the questions and their answers.
 
+QuestionManager.py - A python class that manages the randon question 
+
 Statistics.py - Stores and calculates statistics about a player's performance n the game. Imported in the Client.py/Bot.py.
 
 Input.py - Imported in the Client.py/Bot.py. Creates an input dialog for answering questions and manages timeout.
 
 ```sql
 
-inputClass.py          Questions.py
+                       Questions.py
+inputClass.py        QuestionManager.py
 |                           |
 |                           |
 v                           v
