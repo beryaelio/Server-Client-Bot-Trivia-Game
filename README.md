@@ -10,7 +10,7 @@ inputClass.py        Bot.py
 |                      |
 |                      |
 v                      v
-Client.py --------> Server.py <-------- Questions.py
+Client.py -------->Server.py<--------Questions.py
 ^
 |
 |
