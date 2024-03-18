@@ -36,10 +36,10 @@ Input.py - Imported in the Client.py/Bot.py. Creates an input dialog for answeri
 
 ```sql
 
-inputClass.py    Questions.py
-|                     |
-|                     |
-v                     v
+inputClass.py          Questions.py
+|                           |
+|                           |
+v                           v
 Client.py/Bot.py________>Server.py
 ^
 |
