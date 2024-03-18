@@ -1,6 +1,22 @@
 # Server-Client-Bot Trivia Game
 A trivia game you can run locally. Here's the server side, client side and even a bot implementation in python. 
 
+# Flowchart of the files:
+The organization of the files
+
+```sql
+
+inputClass.py        Bot.py  
+|                      |
+|                      |
+v                      v
+Client.py --------> Server.py <-------- Questions.py
+^
+|
+|
+Statistics.py
+               
+```
 
 
 # Flowchart of the Server's Executation: 
