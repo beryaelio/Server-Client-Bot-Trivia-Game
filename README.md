@@ -1,8 +1,8 @@
 # Server-Client-Bot Trivia Game
 A trivia game we created in python that you can run locally. Here's the server side, client side and even a bot implementation. 
 
-## Introduction
-# Brief Description: 
+# Introduction
+## Brief Description: 
 This is a trivia game of 20 questions about Aston Villa FC.
 
 To answer 'True' you should type 'Y', 'T' or 1. To answer 'False' you should type 'N', 'F' or 0. 
@@ -13,7 +13,7 @@ We also have 2 python files: InputClass.py and Questions.py
 
 To run the game you need to run the Server.py first and the Client.py and Bot.py to be players in the game.
 
-# Motivation:
+## Motivation:
 This project was made as part of our 'Data Networking' course in uni. We synchronize and manage udp (for the server) and tcp (for the clients) connections.
 
 This projct taught us a lot about the network, server-client communications and the management of it all. 
