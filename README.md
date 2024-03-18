@@ -6,11 +6,11 @@ The organization of the files
 
 ```sql
 
-inputClass.py      Questions.py
-|                      |
-|                      |
-v                      v
-Client.py_________>Server.py<________Bot.py
+inputClass.py    Questions.py
+|                     |
+|                     |
+v                     v
+Client.py________>Server.py<________Bot.py
 ^
 |
 |
