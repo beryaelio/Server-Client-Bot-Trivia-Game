@@ -40,7 +40,7 @@ inputClass.py    Questions.py
 |                     |
 |                     |
 v                     v
-Client.py________>Server.py<________Bot.py
+Client.py/Bot.py________>Server.py
 ^
 |
 |
