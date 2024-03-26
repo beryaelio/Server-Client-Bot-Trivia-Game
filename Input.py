@@ -7,7 +7,6 @@ class TimedInputDialog(simpledialog.Dialog):
     A class that manages the input dialog for answering questions.
     """
     def __init__(self, parent, title, timeout=10):
-        self._parent = parent
         self.timeout = timeout
         super().__init__(parent, title)
 
@@ -22,10 +21,20 @@ class TimedInputDialog(simpledialog.Dialog):
     def buttonbox(self):
         super().buttonbox()
         self.wm_attributes("-topmost", 1)
-        self.after(self.timeout * 1000, self.cancel)
+        self.timeout_event = self.after(self.timeout * 1000, self.on_timeout)
+
+    def on_timeout(self):
+        self.cancel()
+
+    def cancel(self):
+        if self.timeout_event is not None:
+            self.after_cancel(self.timeout_event)
+            self.timeout_event = None
+        super().cancel()
 
     def apply(self):
         self.result = self.entry.get()
+
 
 def get_input_with_timeout(timeout=10):
     """
@@ -36,3 +45,4 @@ def get_input_with_timeout(timeout=10):
     input_dialog = TimedInputDialog(root, "Input", timeout)
     root.destroy()
     return input_dialog.result
+
