@@ -341,10 +341,4 @@ class Server:
             print(f"Error declaring winner: {e}")
 
 
-server = Server()
-server.start_udp_broadcast()
-udp_broadcast_thread = threading.Thread(target=server.start_udp_broadcast())
-udp_broadcast_thread.start()
-server.accept_tcp_connections()
-
 
