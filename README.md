@@ -17,14 +17,14 @@ In this project we made 3 main python files: Server.py, Client.py, Bot.py
 
 We also have 4 helper python files: Input.py, Statistics.py, Questions.py and QuestionManager.py
 
-To run the game you need to run the following files: Server.py, Main.py, ClientInstance.py and the Bot.py file.
+To run the game you need to run the following files: Main.py, ClientAlice.py, ClientBob.py, ClientPhil.py and the Bot.py file.
 
-To run the game you need to run the Server.py first and the ClientInstance.py, Main.py, Bot.py to be players in the game.
+To run the game you need to run the Main.py first (that's where the server is called) and the Alice.py, Bob.py, Charlie.py, Bot.py to be players in the game.
 
 ## Motivation:
 This project was made as part of our 'Data Networking' course in uni. We synchronize and manage udp (for the server) and tcp (for the clients) connections.
 
-This projct taught us a lot about the network, server-client communications and the management of it all. 
+This projct taught us a lot about the network, server-client communications and the management of it. 
 
 
 # Flowchart of the files:
@@ -44,19 +44,26 @@ Statistics.py - Stores and calculates statistics about a player's performance n 
 
 Input.py - Imported in the Client.py/Bot.py. Creates an input dialog for answering questions and manages timeout.
 
+We also added the following files, only for the running of the game:
+
+Main.py file - that calls the Server class.
+
+Alice/Bob/Charlie.py - Creating and running instances of the Client (the players).
+
+
 ```sql
 
-                                                   Questions.py
-                                 Input.py       QuestionManager.py
-                                 |                      |
-                                 |                      |
-                                 v                      v
-ClientInstance.py/ ________>  Client.py/  ________>  Server.py
-     Main.py                   Bot.py
-                                 ^
-                                 |
-                                 |
-                                 Statistics.py
+                                                              Questions.py
+                                        Input.py            QuestionManager.py
+                                            |                      |
+                                            |                      |
+                                            v                      v
+ClientAlice/Bob/Charlie.py/ ________>  Client.py/  ________>  Server.py <________ Main.py
+                                          Bot.py
+                                            ^
+                                            |
+                                            |
+                                       Statistics.py
                        
 ```
 
