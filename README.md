@@ -17,7 +17,9 @@ In this project we made 3 main python files: Server.py, Client.py, Bot.py
 
 We also have 4 helper python files: Input.py, Statistics.py, Questions.py and QuestionManager.py
 
-To run the game you need to run the Server.py first and the Client.py and Bot.py to be players in the game.
+To run the game you need to run the following files: Server.py, Main.py, ClientInstance.py and the Bot.py file.
+
+To run the game you need to run the Server.py first and the ClientInstance.py, Main.py, Bot.py to be players in the game.
 
 ## Motivation:
 This project was made as part of our 'Data Networking' course in uni. We synchronize and manage udp (for the server) and tcp (for the clients) connections.
@@ -44,17 +46,18 @@ Input.py - Imported in the Client.py/Bot.py. Creates an input dialog for answeri
 
 ```sql
 
-                       Questions.py
-inputClass.py        QuestionManager.py
-|                           |
-|                           |
-v                           v
-Client.py/Bot.py________>Server.py
-^
-|
-|
-Statistics.py
-               
+                                                   Questions.py
+                                 Input.py       QuestionManager.py
+                                 |                      |
+                                 |                      |
+                                 v                      v
+ClientInstance.py/ ________>  Client.py/  ________>  Server.py
+     Main.py                   Bot.py
+                                 ^
+                                 |
+                                 |
+                                 Statistics.py
+                       
 ```
 
 
