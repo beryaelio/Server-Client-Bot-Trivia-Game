@@ -8,7 +8,8 @@ class QuestionManager:
     A class that manages the connection between the Questions and the game server.
     """
     def __init__(self, questions_filename='questions.py'):
-        dir_path = os.path.dirname(os.path.realpath(__file__))
+        # Dynamically set the path to the questions file
+        dir_path = os.path.dirname(os.path.realpath(__file__))  # Gets the directory where this script is located
         self.question_file = os.path.join(dir_path, questions_filename)
         self.questions = []
         self.load_questions()
@@ -20,7 +21,7 @@ class QuestionManager:
             spec = importlib.util.spec_from_file_location("questions_module", self.question_file)
             questions_module = importlib.util.module_from_spec(spec)
             spec.loader.exec_module(questions_module)
-            self.questions = questions_module.questions
+            self.questions = questions_module.questions  # Make sure this line correctly assigns the questions
         except Exception as e:
             print(f"Error loading questions: {e}")
 
