@@ -1,4 +1,5 @@
-"""The questions for the trivia game"""
+
+"""A python file containing all the questions and their answers"""
 questions = [
     {'question': "Aston Villa's current manager is Pep Guardiola.", 'answer': ['N', 'F', '0']},
     {'question': "Aston Villa's mascot is a lion named Hercules.", 'answer': ['Y', 'T', '1']},
