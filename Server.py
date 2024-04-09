@@ -17,47 +17,6 @@ RESET = "\033[0m"
 class Server:
 
     def __init__(self):
-        """
-        Initializes the server with necessary attributes for managing a multiplayer trivia game.
-
-        Attributes:
-            qm (QuestionManager): An instance of the QuestionManager class to manage trivia questions.
-            round_answers_lock (Lock): A threading lock to ensure thread-safe operations on round_answers.
-            correct_players_lock (Lock): A lock to manage concurrent access to the correct_players set.
-            connected_clients_lock (Lock): A lock for thread-safe operations on the connected_clients set.
-            addresses_lock (Lock): A lock to manage access to the addresses set which tracks client IP addresses.
-
-            timer_thread (threading.Thread): A thread for managing game timing events.
-
-            declare_barrier (Barrier): A synchronization primitive to manage the transition from game play to declaring a winner.
-            round_barrier (Barrier): A barrier to synchronize the end of a game round.
-
-            declare_winner_event (Event): An event to signal the declaration of a game winner.
-            result_event (Event): An event to manage the timing of sending game results to players.
-            round_event (Event): An event to start a new game round.
-            start_event (Event): An event that signals the start of the game.
-
-            server_name (str): The name of the server.
-            correct_answer (str): The correct answer for the current trivia question.
-            result_message (str): The message summarizing the results of a game round.
-            addresses (set): A set of IP addresses to track connected clients.
-            connected_clients (set): A set of tuples storing information about connected clients.
-            correct_players (set): A set of player names who have not been eliminated.
-            General_round (int): The current round of the game.
-            correct_answers (int): The number of correct answers in the current round.
-            round_answers (dict): A dictionary to track players' answers {player_name: (answer, correct)}.
-            current_question (str): The current trivia question being asked.
-            broadcast_udp_flag (int): A flag to control UDP broadcast for game invitations.
-
-            port_number (int): The TCP port number on which the server operates.
-            udp_broadcast_thread (threading.Thread): A thread dedicated to broadcasting UDP invitations.
-
-        Methods:
-            start_udp_broadcast: Broadcasts a game invitation message over UDP.
-            accept_tcp_connections: Accepts TCP connections from clients and handles them.
-
-        This initialization sets up the game server, starts broadcasting invitations, and accepts incoming TCP connections from clients.
-        """
         self.qm = QuestionManager()
         self.round_answers_lock = Lock()
         self.correct_players_lock = Lock()
@@ -121,6 +80,16 @@ class Server:
                 server_socket.sendto(message, ('<broadcast>', 13117))
             time.sleep(1)
 
+    def reset_timer(self):
+        """
+        Reset the timer of 10 seconds for the players connection.
+        """
+        with self.connected_clients_lock:
+            if self.timer_thread:
+                self.timer_thread.cancel()
+            self.start_event.clear()
+            self.timer_thread = threading.Timer(10, self.start_game)
+            self.timer_thread.start()
 
     def is_port_in_use(self, port):
         """
@@ -149,16 +118,7 @@ class Server:
             return ip_address
         except Exception:
             return "127.0.0.1"
-    def reset_timer(self):
-        """
-        Reset the timer of 10 seconds for the players connection.
-        """
-        with self.connected_clients_lock:
-            if self.timer_thread:
-                self.timer_thread.cancel()
-            self.start_event.clear()
-            self.timer_thread = threading.Timer(10, self.start_game)
-            self.timer_thread.start()
+
     def accept_tcp_connections(self):
         """
         Accept TCP connections from clients (the players) and adds them to the players' variables.
@@ -180,25 +140,9 @@ class Server:
             thread = threading.Thread(target=self.client_handler, args=(client_socket, client_address))
             thread.start()
 
-
     def client_handler(self, client_socket, client_address):
         """
-        Manages an individual client's connection and participation in the game.
-
-        Steps:
-        1. Receives the client's player name and checks for duplicates. If a duplicate is found, it assigns a unique name.
-        2. Adds the player to the game by updating game state variables, ensuring thread-safe access through locks.
-        3. Waits for the game to start, signaled by the 'start_event'.
-        4. Enters a loop that continues for the duration of the client's participation in the game:
-           a. Waits for the 'round_event', signaling the start of a new round.
-           b. Sends the current question to the client, handling any potential disconnection.
-           c. Calls 'handle_answers' to receive and process the client's answer.
-           d. Waits for the 'result_event' to signal that results can be sent, then calls 'send_results'.
-           e. Waits at a 'round_barrier' to ensure synchronization with other client handlers before proceeding to the next round or concluding the game.
-        5. If the client is the last correct player remaining or if all players have been eliminated, declares the winner and breaks the loop.
-        6. Cleans up by closing the client socket upon completion of the game or encountering a timeout exception.
-
-        This function uses several synchronization mechanisms (Events, Barriers, Locks) to ensure that game state updates are consistent across multiple threads and that clients are processed in sync with the game's progression.
+        Handle a client connection to the server. add the player to the game variables and reset the timer.
         """
         try:
             client_socket.settimeout(0.1)
@@ -208,8 +152,6 @@ class Server:
             player_name = player_name.strip('\n')
 
             with self.correct_players_lock, self.connected_clients_lock, self.addresses_lock:
-            # If the computer of a certain client crash and restart, and effectively connect again to the server, it will check that it does not
-            #redundantly create the same name twice. E.g Mickael and Mickael2 from the same computer.
                 if player_name in self.correct_players and client_address[0] not in self.addresses:
                     player_name = player_name + str(len(self.correct_players))
                     duplicate_player = f"You have been assigned {player_name}\n"
@@ -264,19 +206,7 @@ class Server:
 
     def game_loop(self):
         """
-        Manages the game's progression by controlling the flow of rounds, broadcasting questions, and evaluating answers.
-        Utilizes synchronization primitives like Barriers and Events to coordinate between threads handling individual clients.
-
-        Steps:
-        1. Initializes barriers based on the number of connected clients.
-        2. Enters a loop that continues as long as more than one player remains correct.
-        3. Broadcasts the start of the game or questions for each round.
-        4. Waits for answers within a timeout period and evaluates them, updating scores.
-        5. After each round, waits at a barrier to ensure all threads have processed the round before proceeding.
-        6. Declares a winner if only one correct player remains, broadcasting the result.
-        7. Resets game state for potential new rounds and continues listening for new offers.
-
-        The round and result events control the flow within each client handler thread, ensuring that messages are sent and received in sync.
+        The actual management of the game play. Determines what happens when and calls the appropriate functions.
         """
         self.General_round = 1
         self.round_barrier = Barrier(len(self.connected_clients) + 1)
@@ -347,24 +277,9 @@ class Server:
 
     def evaluate_and_update_scores(self):
         """
-        Evaluates the answers submitted by players during a game round and updates the scores accordingly.
-
-        Process:
-        1. Checks if any players have submitted answers within the time limit.
-           a. If no players responded in time, it resets the game state for a new round and informs all players that no answers were received.
-           b. If there are players who responded, it processes their answers.
-        2. Iterates over the collected answers from players, determining whether each answer is correct or incorrect.
-           a. Correct answers are acknowledged, and the player's status in the game is maintained.
-           b. Incorrect answers lead to the removal of the player from the list of players eligible to win the round.
-        3. Updates the game state based on the results of the answer evaluations.
-           a. If no correct answers are provided by any player, all players are given another chance in a new round.
-           b. If only one player remains as having provided a correct answer, that player is declared the winner.
-        4. Constructs a message summarizing the outcomes of the round's answers, which is then broadcast to all players.
-
-        The method ensures thread-safe operations on shared resources, particularly when accessing and modifying player answers and game state.
+        This function handles the evaluation of the answers given by the players and updating the game state if needed.
         """
         if len(self.correct_players) == 0:
-            # Reset game state and prepare for a new round or game over scenario
             self.correct_players = set()
             # If all the players have disconnected
             print(YELLOW + "No players had answer within the time limit\nGame over!" + RESET)
@@ -372,7 +287,6 @@ class Server:
             self.result_message = "No players had answer within the time limit\nGame over!\n"
  
         elif len(self.correct_players) >= 1:
-            # Evaluate answers and determine the correct and incorrect responses
             with self.round_answers_lock:
                 who_is_correct = ""
                 copy_of_correct_players = self.correct_players.copy()
@@ -384,7 +298,6 @@ class Server:
                             self.correct_players.remove(player_name)
                             incorrect = f"\n{player_name} is incorrect!" + who_is_correct
                             who_is_correct = incorrect
-                # Prepare for the next round or game conclusion
                 if len(self.correct_players) == 0:
                     self.correct_players = copy_of_correct_players.copy()
                 if len(self.correct_players) == 1 and "is correct" in who_is_correct:
@@ -427,5 +340,11 @@ class Server:
         except Exception as e:
             print(f"Error declaring winner: {e}")
 
+
+server = Server()
+server.start_udp_broadcast()
+udp_broadcast_thread = threading.Thread(target=server.start_udp_broadcast())
+udp_broadcast_thread.start()
+server.accept_tcp_connections()
 
 
